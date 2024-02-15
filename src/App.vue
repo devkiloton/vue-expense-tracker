@@ -1,8 +1,8 @@
 <template>
   <Header />
   <div class="container">
-    <Balance />
-    <IncomeExpenses />
+    <Balance :total="total" />
+    <IncomeExpenses :incomes="incomes" :expenses="expenses" />
     <TransactionList :transactions="transactions" />
     <AddTransaction />
   </div>
@@ -14,10 +14,35 @@ import Balance from "./components/Balance.vue";
 import IncomeExpenses from "./components/IncomeExpenses.vue";
 import TransactionList from "./components/TransactionList.vue";
 import AddTransaction from "./components/AddTransaction.vue";
-import { ref } from "vue";
+import { formatNumber } from "./helpers/format-number";
+import { ref, computed } from "vue";
 
 const transactions = ref([
   { id: 1, text: "Flower", amount: -19.99 },
   { id: 2, text: "Drink", amount: 319.99 },
 ]);
+
+const total = computed(() => {
+  return transactions.value.reduce((acc, curr) => {
+    return acc + curr.amount;
+  }, 0);
+});
+
+const incomes = computed(() => {
+  const totalIncomes = transactions.value
+    .filter(transaction => transaction.amount > 0)
+    .reduce((acc, curr) => {
+      return acc + curr.amount;
+    }, 0);
+  return formatNumber(totalIncomes);
+});
+
+const expenses = computed(() => {
+  const totalExpenses = transactions.value
+    .filter(transaction => transaction.amount < 0)
+    .reduce((acc, curr) => {
+      return acc + curr.amount;
+    }, 0);
+  return formatNumber(totalExpenses);
+});
 </script>

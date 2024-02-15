@@ -1,20 +1,17 @@
 <template>
   <h4>Your balance</h4>
-  <h1 id="balance">$0.00</h1>
+  <h1 id="balance">${{ props.total }}</h1>
 </template>
 
-<script>
-/* eslint-disable */
+<script setup>
+import { defineProps } from "vue";
 
-export default {
-  name: "balance",
-  created() {},
-  data() {
-    return {};
+const props = defineProps({
+  total: {
+    type: Number,
+    required: true,
   },
-  props: {},
-  methods: {},
-};
+});
 </script>
 
 <style lang="scss" scoped></style>

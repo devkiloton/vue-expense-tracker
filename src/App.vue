@@ -3,7 +3,9 @@
   <div class="container">
     <Balance :total="total" />
     <IncomeExpenses :incomes="incomes" :expenses="expenses" />
-    <TransactionList :transactions="transactions" />
+    <TransactionList
+      :transactions="transactions"
+      @transactionDeleted="handleTransactionDeleted" />
     <AddTransaction @transactionSubmitted="handleTransactionSubmitted" />
   </div>
 </template>
@@ -58,6 +60,14 @@ const handleTransactionSubmitted = transaction => {
     amount: transaction.amount,
   });
   toast.success("Transaction added! 🎉");
+};
+
+/** Filter's any transaction with the given id */
+const handleTransactionDeleted = id => {
+  transactions.value = transactions.value.filter(
+    transaction => transaction.id !== id,
+  );
+  toast.success("Transaction deleted! 🎉");
 };
 
 /** Generates a very simple uid */

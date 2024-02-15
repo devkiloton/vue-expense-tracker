@@ -32,6 +32,7 @@ const emit = defineEmits(["transactionSubmitted"]);
 const onSubmit = () => {
   if (!text.value || !amount.value) {
     toast.error("Both fields must to be filled");
+    return;
   }
 
   const transactionData = {

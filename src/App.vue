@@ -4,7 +4,7 @@
     <Balance :total="total" />
     <IncomeExpenses :incomes="incomes" :expenses="expenses" />
     <TransactionList :transactions="transactions" />
-    <AddTransaction />
+    <AddTransaction @transactionSubmitted="handleTransactionSubmitted" />
   </div>
 </template>
 
@@ -15,7 +15,11 @@ import IncomeExpenses from "./components/IncomeExpenses.vue";
 import TransactionList from "./components/TransactionList.vue";
 import AddTransaction from "./components/AddTransaction.vue";
 import { formatNumber } from "./helpers/format-number";
+import { useToast } from "vue-toastification";
 import { ref, computed } from "vue";
+import { v4 } from "uuid";
+
+const toast = useToast();
 
 const transactions = ref([
   { id: 1, text: "Flower", amount: -19.99 },
@@ -45,4 +49,19 @@ const expenses = computed(() => {
     }, 0);
   return formatNumber(totalExpenses);
 });
+
+/** Pushes any transaction to transactions array */
+const handleTransactionSubmitted = transaction => {
+  transactions.value.push({
+    id: generateUID(),
+    text: transaction.text,
+    amount: transaction.amount,
+  });
+  toast.success("Transaction added! 🎉");
+};
+
+/** Generates a very simple uid */
+const generateUID = () => {
+  return v4();
+};
 </script>
